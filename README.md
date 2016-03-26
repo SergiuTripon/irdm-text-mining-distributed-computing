@@ -1,1 +1,1 @@
-# irdm-assignment1-part-a
+# IRDM - Assignment 1 - Part A
