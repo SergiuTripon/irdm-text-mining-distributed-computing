@@ -19,7 +19,7 @@ rm -rf ../terrier-core-4.1/var/index/*
 # generate collection
 sh ../terrier-core-4.1/bin/trec_setup.sh ../clueweb12/
 
-echo '### Beginning of properties added by Sergiu Tripon ###' >> ../terrier-core-4.1/etc/terrier.properties
+echo '###### Beginning of properties added by Sergiu Tripon ######' >> ../terrier-core-4.1/etc/terrier.properties
 echo >> ../terrier-core-4.1/etc/terrier.properties
 echo '# path to index folder' >> ../terrier-core-4.1/etc/terrier.properties
 echo terrier.index.path=index/ >> ../terrier-core-4.1/etc/terrier.properties

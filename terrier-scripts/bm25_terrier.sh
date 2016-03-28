@@ -32,7 +32,7 @@ echo >> ../terrier-core-4.1/etc/terrier.properties
 echo '# path to qrels file' >> ../terrier-core-4.1/etc/terrier.properties
 echo trec.qrels=../qrels/qrels.adhoc.txt >> ../terrier-core-4.1/etc/terrier.properties
 echo >> ../terrier-core-4.1/etc/terrier.properties
-echo '### End of properties added by Sergiu Tripon ###' >> ../terrier-core-4.1/etc/terrier.properties
+echo '###### End of properties added by Sergiu Tripon ######' >> ../terrier-core-4.1/etc/terrier.properties
 
 # perform batch retrieval
 ../terrier-core-4.1/bin/trec_terrier.sh -r
