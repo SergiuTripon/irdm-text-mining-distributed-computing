@@ -226,7 +226,7 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
             the Result object """
         data += [Result(query_id, doc_id, doc_score)]
         # print progress
-        print('Scored {} out of {} documents'.format(print_progress, N))
+        print('query id {} - scored {} out of {} documents'.format(query_id, print_progress, N))
         # increment print progress
         print_progress += 1
 
