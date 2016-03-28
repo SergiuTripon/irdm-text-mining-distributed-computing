@@ -1,7 +1,13 @@
 
+# Ref: https://en.wikipedia.org/wiki/Okapi_BM25
+
+########################################################################################################################
+
+
 # python packages
 from math import log2
 from operator import attrgetter
+
 
 ########################################################################################################################
 
@@ -224,6 +230,9 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
         # increment print progress
         print_progress += 1
 
+    # sort data in reverse order
+    data = sorted(data, reverse=True, key=attrgetter('doc_score'))
+
     # return data
     return data
 
@@ -257,17 +266,17 @@ def main():
         query_term_id = query.query_term_id
         # calculate bm25 score and return output in results
         results = calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_id, k1, b)
-        # sort results in reverse order
-        results = sorted(results, reverse=True, key=attrgetter('doc_score'))
         # open file
         with open('output/BM25b0.75_0.res', mode='a') as results_file:
             # variable to hold document rank
             doc_rank = 0
             # for every result
             for result in results:
-                # write results in standard TREC format
-                results_file.write('{} Q0 {} {} {} bm25\n'.
-                                   format(result.query_id, result.doc_id, doc_rank, result.doc_score))
+                # if document rank is less than 100
+                if doc_rank < 100:
+                    # write results in standard TREC format
+                    results_file.write('{} Q0 {} {} {} bm25\n'.
+                                       format(result.query_id, result.doc_id, doc_rank, result.doc_score))
                 # increment document rank
                 doc_rank += 1
         # print progress
