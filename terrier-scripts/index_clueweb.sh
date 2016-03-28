@@ -49,7 +49,7 @@ echo indexer.meta.reverse.keys=filename >> ../terrier-core-4.1/etc/terrier.prope
 echo '# specify character length' >> ../terrier-core-4.1/etc/terrier.properties
 echo indexer.meta.forward.keylens=64 >> ../terrier-core-4.1/etc/terrier.properties
 echo >> ../terrier-core-4.1/etc/terrier.properties
-echo '# Question 1' >> ../terrier-core-4.1/etc/terrier.properties
+echo '### Question 1 ###' >> ../terrier-core-4.1/etc/terrier.properties
 echo >> ../terrier-core-4.1/etc/terrier.properties
 echo '# convert document text to lower case' >> ../terrier-core-4.1/etc/terrier.properties
 echo lowercase=TRUE >> ../terrier-core-4.1/etc/terrier.properties

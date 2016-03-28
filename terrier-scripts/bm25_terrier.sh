@@ -10,7 +10,7 @@
 rm -rf ../terrier-core-4.1/var/results/*
 
 echo >> ../terrier-core-4.1/etc/terrier.properties
-echo '# Question 2' >> ../terrier-core-4.1/etc/terrier.properties
+echo '### Question 2 ###' >> ../terrier-core-4.1/etc/terrier.properties
 echo >> ../terrier-core-4.1/etc/terrier.properties
 echo '# path to topics file' >> ../terrier-core-4.1/etc/terrier.properties
 echo trec.topics=../topics/trec2013-topics.txt >> ../terrier-core-4.1/etc/terrier.properties
