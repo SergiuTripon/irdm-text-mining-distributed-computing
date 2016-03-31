@@ -95,9 +95,9 @@ def load_docs(input_file):
                 # split token
                 token = token.split(':')
                 # assign first token to document term id
-                doc_term_id.append(token[0])
+                doc_term_id += [token[0]]
                 # assign second token to document term frequency
-                doc_term_freq.append(token[1])
+                doc_term_freq += [token[1]]
                 # assign second token to document length
                 doc_len += int(token[1])
             # assign document length to documents length
@@ -138,9 +138,9 @@ def load_queries(input_file):
                 # split token
                 token = token.split(':')
                 # assign first token to query term id
-                query_term_id.append(token[0])
+                query_term_id += [token[0]]
                 # assign second token to query term frequency
-                query_term_freq.append(token[1])
+                query_term_freq += [token[1]]
             """ add query id, query vector, query term id and query term frequency
                 as attributes of the Query object """
             data += [Query(query_id, query_vec, query_term_id, query_term_freq)]
