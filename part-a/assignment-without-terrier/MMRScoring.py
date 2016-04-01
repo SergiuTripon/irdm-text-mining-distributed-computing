@@ -15,6 +15,8 @@ from collections import OrderedDict, Counter
 # loads docs
 def load_docs(input_file):
 
+    # list to hold unique docs
+    unique_docs = []
     # list to hold document vector
     doc_vec = []
     # list to hold document term ids
@@ -24,22 +26,26 @@ def load_docs(input_file):
     with open(input_file) as input_file:
         # for every line in input file
         for line in input_file:
-            # split line into tokens
-            tokens = line.strip(' \n').split(' ')
-            # assign first token to document id
-            doc_id = tokens[0]
-            # list to hold temporary document vector
-            doc_vec_temp = []
-            # for every token except the first one
-            for token in tokens[1:]:
-                # split token
-                token = token.split(':')
-                # add first token to document term ids
-                doc_term_ids += [int(token[0])]
-                # add first and second token to temporary document vector
-                doc_vec_temp += [(int(token[0]), int(token[1]))]
-            # add document id and temporary document vector to document vector list
-            doc_vec += [(doc_id, doc_vec_temp)]
+            # if document id is not in unique docs
+            if line.split(' ')[0] not in unique_docs:
+                # add document id to unique documents list
+                unique_docs += [line.split(' ')[0]]
+                # split line into tokens
+                tokens = line.strip(' \n').split(' ')
+                # assign first token to document id
+                doc_id = tokens[0]
+                # list to hold temporary document vector
+                doc_vec_temp = []
+                # for every token except the first one
+                for token in tokens[1:]:
+                    # split token
+                    token = token.split(':')
+                    # add first token to document term ids
+                    doc_term_ids += [int(token[0])]
+                    # add first and second token to temporary document vector
+                    doc_vec_temp += [(int(token[0]), int(token[1]))]
+                # add document id and temporary document vector to document vector list
+                doc_vec += [(doc_id, doc_vec_temp)]
 
     # return document vector and document term ids
     return doc_vec, doc_term_ids

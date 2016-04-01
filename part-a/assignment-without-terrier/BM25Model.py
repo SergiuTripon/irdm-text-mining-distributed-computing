@@ -69,6 +69,8 @@ class Result(object):
 # loads documents
 def load_docs(input_file):
 
+    # list to hold unique docs
+    unique_docs = []
     # list to hold data
     data = []
     # variable to hold documents length
@@ -78,33 +80,37 @@ def load_docs(input_file):
     with open(input_file) as input_file:
         # for every line in input file
         for line in input_file:
-            # split line into tokens
-            tokens = line.strip(' \n').split(' ')
-            # assign first token to document id
-            doc_id = tokens[0]
-            # assign all tokens except the first one to document vector
-            doc_vec = tokens[1:]
-            # list to hold document term id
-            doc_term_id = []
-            # list to hold document term frequency
-            doc_term_freq = []
-            # variable to hold document length
-            doc_len = 0
-            # for every token except the first one
-            for token in tokens[1:]:
-                # split token
-                token = token.split(':')
-                # add first token to document term id
-                doc_term_id += [token[0]]
-                # add second token to document term frequency
-                doc_term_freq += [token[1]]
-                # add second token to document length
-                doc_len += int(token[1])
-            # add document length to documents length
-            docs_len += doc_len
-            """ add document id, document vector, document term id, document term
-                frequency and document length as attributes of the Doc object """
-            data += [Doc(doc_id, doc_vec, doc_term_id, doc_term_freq, doc_len)]
+            # if document id is not in unique docs
+            if line.split(' ')[0] not in unique_docs:
+                # add document id to unique documents list
+                unique_docs += [line.split(' ')[0]]
+                # split line into tokens
+                tokens = line.strip(' \n').split(' ')
+                # assign first token to document id
+                doc_id = tokens[0]
+                # assign all tokens except the first one to document vector
+                doc_vec = tokens[1:]
+                # list to hold document term id
+                doc_term_id = []
+                # list to hold document term frequency
+                doc_term_freq = []
+                # variable to hold document length
+                doc_len = 0
+                # for every token except the first one
+                for token in tokens[1:]:
+                    # split token
+                    token = token.split(':')
+                    # add first token to document term id
+                    doc_term_id += [token[0]]
+                    # add second token to document term frequency
+                    doc_term_freq += [token[1]]
+                    # add second token to document length
+                    doc_len += int(token[1])
+                # add document length to documents length
+                docs_len += doc_len
+                """ add document id, document vector, document term id, document term
+                    frequency and document length as attributes of the Doc object """
+                data += [Doc(doc_id, doc_vec, doc_term_id, doc_term_freq, doc_len)]
 
     # return data and documents length
     return data, docs_len
