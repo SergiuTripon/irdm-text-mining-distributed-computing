@@ -1,6 +1,6 @@
 
-from math import sqrt
-from collections import OrderedDict
+from math import sqrt, log10
+from collections import OrderedDict, Counter
 
 ########################################################################################################################
 
@@ -9,6 +9,7 @@ from collections import OrderedDict
 def load_docs(input_file):
 
     data = []
+    doc_term_ids = []
 
     with open(input_file) as input_file:
         for line in input_file:
@@ -18,10 +19,11 @@ def load_docs(input_file):
             doc_vec_temp = []
             for token in tokens[1:]:
                 token = token.split(':')
-                doc_vec_temp += [(token[0], token[1])]
+                doc_term_ids += [int(token[0])]
+                doc_vec_temp += [(int(token[0]), int(token[1]))]
             data += [(doc_id, doc_vec_temp)]
 
-    return data
+    return data, doc_term_ids
 
 
 ########################################################################################################################
@@ -54,8 +56,49 @@ def load_results(input_file):
 ########################################################################################################################
 
 
-def calc_sim(rq_doc_vec, dq_doc_vec):
+def calc_sim(rq_doc_id, dq_doc_id, rq_doc_vec, dq_doc_vec, rq_doc_term_ids, dq_doc_term_ids, doc_term_ids, test):
 
+    intersection = set(rq_doc_term_ids).intersection(dq_doc_term_ids)
+
+    rq_memoize = {}
+    dq_memoize = {}
+
+    if rq_doc_id not in rq_memoize or dq_doc_id not in dq_memoize:
+        rq_memoize[rq_doc_id] = [test.get(x) * rq_doc_vec.get(x) for x in intersection]
+        dq_memoize[dq_doc_id] = [test.get(x) * dq_doc_vec.get(x) for x in intersection]
+
+    rq_vector = rq_memoize.get(rq_doc_id)
+    dq_vector = dq_memoize.get(dq_doc_id)
+
+    dot_product = sum([x * y for x, y in zip(rq_vector, dq_vector)])
+
+    d1 = sqrt(sum([(x ** 2) for x in rq_vector]))
+    d2 = sqrt(sum([(x ** 2) for x in dq_vector]))
+
+    d1_d2 = d1 * d2
+
+    cos = float(dot_product) / d1_d2
+
+    '''
+    rq_doc_vec = OrderedDict(rq_doc_vec)
+    dq_doc_vec = OrderedDict(dq_doc_vec)
+
+    rq_tfidf = [(log10(4848 / doc_term_ids.count(x[0])) * int(x[1])) for x in rq_doc_vec.items()]
+    dq_tfidf = [(log10(4848 / doc_term_ids.count(x[0])) * int(x[1])) for x in dq_doc_vec.items()]
+
+    dot_product = sum([x * y for x, y in zip(rq_tfidf, dq_tfidf)])
+
+    d1 = sqrt(sum([(x ** 2) for x in rq_tfidf]))
+    d2 = sqrt(sum([(x ** 2) for x in dq_tfidf]))
+    d1_d2 = d1 * d2
+
+    if d1_d2 != 0.0:
+        cos = float(dot_product) / d1_d2
+    else:
+        cos = 0.0
+    '''
+
+    '''
     rq_doc_vec = OrderedDict(rq_doc_vec)
     dq_doc_vec = OrderedDict(dq_doc_vec)
 
@@ -72,6 +115,7 @@ def calc_sim(rq_doc_vec, dq_doc_vec):
         cos = float(dot_product) / d1_d2
     else:
         cos = 0.0
+    '''
 
     return cos
 
@@ -79,7 +123,7 @@ def calc_sim(rq_doc_vec, dq_doc_vec):
 ########################################################################################################################
 
 
-def calc_mmr(query_id, results, rq, doc_ranks, scores, doc_vec, lambda_weight):
+def calc_mmr(query_id, results, rq, doc_ranks, scores, doc_vec, doc_term_ids, lambda_weight, test):
 
     max_score = scores[0]
     dq = [rq[0]]
@@ -106,12 +150,15 @@ def calc_mmr(query_id, results, rq, doc_ranks, scores, doc_vec, lambda_weight):
             for rq_doc in rq:
                 for dq_doc in dq:
                     rq_doc_vec = doc_vec.get(rq_doc)
+                    rq_doc_term_ids = [x[0] for x in doc_vec.get(rq_doc)]
                     dq_doc_vec = doc_vec.get(dq_doc)
+                    dq_doc_term_ids = [x[0] for x in doc_vec.get(dq_doc)]
                     qid_did = ' '.join([str(query_id), rq_doc])
                     rq_doc_rank = doc_ranks.get(qid_did)
                     rq_doc_score = results.get(qid_did)
                     f1 = rq_doc_score
-                    f2 = calc_sim(rq_doc_vec, dq_doc_vec)
+                    f2 = calc_sim(rq_doc, dq_doc, OrderedDict(rq_doc_vec), OrderedDict(dq_doc_vec), rq_doc_term_ids,
+                                  dq_doc_term_ids, doc_term_ids, test)
                     mmr = (lambda_weight * f1) - ((1 - lambda_weight) * f2)
                     if mmr > high_mmr:
                         high_mmr = mmr
@@ -136,7 +183,7 @@ def calc_mmr(query_id, results, rq, doc_ranks, scores, doc_vec, lambda_weight):
 def main():
 
     # load docs
-    doc_vec = load_docs('input/document_term_vectors.dat')
+    doc_vec, doc_term_ids = load_docs('input/document_term_vectors.dat')
 
     # load results
     qid_did_score, doc_ids, doc_ranks, doc_scores = load_results('output/BM25b0.75_0.res')
@@ -146,13 +193,17 @@ def main():
 
     query_ids = list(range(201, 251))
 
+    doc_term_ids_counter = Counter(doc_term_ids)
+
+    test = OrderedDict([(x, log10(4848 / doc_term_ids_counter[x])) for x in doc_term_ids])
+
     start = 0
     end = 100
     for query_id in query_ids:
         results = qid_did_score[start:end]
         scores = doc_scores[start:end]
         rq = doc_ids[start:end]
-        calc_mmr(query_id, results, rq, doc_ranks, scores, doc_vec, lambda_weight)
+        calc_mmr(query_id, results, rq, doc_ranks, scores, doc_vec, doc_term_ids, lambda_weight, test)
         start += 100
         end += 100
 
