@@ -101,7 +101,7 @@ def load_qrels(input_file):
 # calculate ndcg
 def calc_ndcg(results, qrels, k, start, end):
 
-    # list to hold rels
+    # list to hold relevance scores
     rels = []
     # loop from start to end
     for i in range(start, end):
@@ -109,19 +109,22 @@ def calc_ndcg(results, qrels, k, start, end):
         doc_rel = [qrel.doc_rel for qrel in qrels for qid_did in qrel.qid_did if results[i] in qid_did]
         # if query id document id is in qrels
         if doc_rel:
-            # add document relevance to rels list
+            # add document relevance to relevance scores list
             rels += [int(doc_rel[0])]
         # if query id document id is not in qrels
         else:
-            # add 0 to rels list
+            # add 0 to relevance scores list
             rels += [0]
 
-    # sort rels in reverse order and assign to sorted rels
+    # if relevance score is less than or equal to 0, rescale to 0
+    rels = [x if x >= 0 else 0 for x in rels]
+
+    # sort relevance scores in descending order and assign to sorted relevance scores
     sorted_rels = sorted(rels, reverse=True)
 
-    # assign first rel to rel 1
+    # assign first relevance score to relevance score 1
     rel1 = rels[0]
-    # assign first sorted rel to sorted rel 1
+    # assign first sorted relevance score to sorted relevance score 1
     sorted_rel1 = sorted_rels[0]
 
     # set dcg fraction to 0.0

@@ -275,7 +275,7 @@ def main():
                 # if document rank is less than 100
                 if doc_rank < 100:
                     # write results in standard TREC format
-                    results_file.write('{} Q0 {} {} {} bm25\n'.
+                    results_file.write('{} Q0 {} {} {} BM25b0.75\n'.
                                        format(result.query_id, result.doc_id, doc_rank, result.doc_score))
                 # increment document rank
                 doc_rank += 1

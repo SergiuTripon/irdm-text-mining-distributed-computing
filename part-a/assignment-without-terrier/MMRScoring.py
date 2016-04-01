@@ -151,7 +151,7 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
     # open file
     with open('output/question-3/mmr_lambda_{:.2f}.txt'.format(lambda_weight), mode='a') as results_file:
         # write results in standard TREC format
-        results_file.write('{} Q0 {} 0 {} mmr_{:.2f}\n'.format(query_id, dq[0], max_score, lambda_weight))
+        results_file.write('{} Q0 {} 0 {} BM25b0.75\n'.format(query_id, dq[0], max_score, lambda_weight))
 
     # create dictionary of query id document id score and assign it to query id document id score
     qid_did_score = dict(qid_did_score)
