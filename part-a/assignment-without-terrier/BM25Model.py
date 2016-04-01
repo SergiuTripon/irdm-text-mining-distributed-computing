@@ -94,13 +94,13 @@ def load_docs(input_file):
             for token in tokens[1:]:
                 # split token
                 token = token.split(':')
-                # assign first token to document term id
+                # add first token to document term id
                 doc_term_id += [token[0]]
-                # assign second token to document term frequency
+                # add second token to document term frequency
                 doc_term_freq += [token[1]]
-                # assign second token to document length
+                # add second token to document length
                 doc_len += int(token[1])
-            # assign document length to documents length
+            # add document length to documents length
             docs_len += doc_len
             """ add document id, document vector, document term id, document term
                 frequency and document length as attributes of the Doc object """
@@ -137,9 +137,9 @@ def load_queries(input_file):
             for token in tokens[1:]:
                 # split token
                 token = token.split(':')
-                # assign first token to query term id
+                # add first token to query term id
                 query_term_id += [token[0]]
-                # assign second token to query term frequency
+                # add second token to query term frequency
                 query_term_freq += [token[1]]
             """ add query id, query vector, query term id and query term frequency
                 as attributes of the Query object """
@@ -185,7 +185,7 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
     # calculate average document length
     avg_doc_len = docs_len / N
 
-    # variable to hold print progress
+    # variable to hold print progress set to 0
     print_progress = 0
     # for every document
     for doc in docs:
@@ -267,7 +267,7 @@ def main():
         # calculate bm25 score and return output in results
         results = calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_id, k1, b)
         # open file
-        with open('output/BM25b0.75_0.res', mode='a') as results_file:
+        with open('output/question-1/BM25b0.75_0.res', mode='a') as results_file:
             # variable to hold document rank
             doc_rank = 0
             # for every result
