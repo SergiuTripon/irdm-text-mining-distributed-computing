@@ -105,7 +105,7 @@ def calc_ndcg(results, qrels, k, start, end):
     rels = []
     # loop from start to end
     for i in range(start, end):
-        # get document relevance from qrels if query id document id is in qrels
+        # get document relevance score from qrels if query id document id is in qrels
         doc_rel = [qrel.doc_rel for qrel in qrels for qid_did in qrel.qid_did if results[i] in qid_did]
         # if query id document id is in qrels
         if doc_rel:
@@ -127,17 +127,10 @@ def calc_ndcg(results, qrels, k, start, end):
     # assign first sorted relevance score to sorted relevance score 1
     sorted_rel1 = sorted_rels[0]
 
-    # set dcg fraction to 0.0
-    dcg_fraction = 0.0
-    # set idcg fraction to 0.0
-    idcg_fraction = 0.0
-
-    # loop from 2 to k
-    for i in range(2, k):
-        # calculate dcg fraction
-        dcg_fraction += (rels[i] / log2(i))
-        # calculate idcg fraction
-        idcg_fraction += (sorted_rels[i] / log2(i))
+    # calculate dcg fraction
+    dcg_fraction = sum([(rels[i] / log2(i)) for i in range(2, k)])
+    # calculate idcg fraction
+    idcg_fraction = sum([(sorted_rels[i] / log2(i)) for i in range(2, k)])
 
     # calculate dcg
     dcg = rel1 + dcg_fraction

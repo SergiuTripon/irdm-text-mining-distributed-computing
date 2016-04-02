@@ -222,11 +222,14 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
 
             # calculate idfqi
             idfqi = log2((N - nqi + 0.5) / (nqi + 0.5))
-            # calculate bm25 score for current document and current query term qi
+            # calculate fraction part
             fraction = (fqid * (k1 + 1)) / (fqid + k1 * (1 - b + b * doc_len / avg_doc_len))
 
+            # calculate bm25 score for current document and current query term qi
+            bm25_score = idfqi * fraction
+
             # add current query term qi's bm25 score to overall document score
-            doc_score += idfqi * fraction
+            doc_score += bm25_score
 
         """ add query id, document id and document score as attributes of
             the Result object """

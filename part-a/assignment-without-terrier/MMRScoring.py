@@ -239,9 +239,9 @@ def main():
     qid_did_score, doc_ids, doc_score = load_results('output/question-1/BM25b0.75_0.res')
 
     # variable to hold lambda weight set to 0.25
-    # lambda_weight = 0.25
+    lambda_weight = 0.25
     # variable to hold lambda weight set to 0.5
-    lambda_weight = 0.5
+    # lambda_weight = 0.5
 
     # assign length of document vector to document vector length
     doc_vec_len = len(doc_vec)
