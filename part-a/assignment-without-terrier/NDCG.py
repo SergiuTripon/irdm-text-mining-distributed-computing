@@ -98,8 +98,10 @@ def calc_ndcg(results, doc_qrel, k, start, end):
     sorted_rel1 = sorted_rels[0]
 
     # calculate dcg fraction
+    # dcg_fraction = sum([(rels[i] / log2(i)) for i in range(2, k)])
     dcg_fraction = sum([(rels[i] / log2(i + 1)) for i in range(1, k)])
     # calculate idcg fraction
+    # idcg_fraction = sum([(sorted_rels[i] / log2(i)) for i in range(2, k)])
     idcg_fraction = sum([(sorted_rels[i] / log2(i + 1)) for i in range(1, k)])
 
     # calculate dcg
