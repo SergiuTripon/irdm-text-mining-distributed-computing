@@ -222,6 +222,9 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
             # remove high mmr document id from rq
             rq.remove(high_mmr_doc_id)
 
+    # print progress
+    print('\nSaved results to file at path: \'{}\'\n'.format(results_file.name))
+
     # return
     return
 
