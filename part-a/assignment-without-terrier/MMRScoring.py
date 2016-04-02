@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+########################################################################################################################
 
 # Ref: https://www.cs.cmu.edu/~jgc/publication/The_Use_MMR_Diversity_Based_LTMIR_1998.pdf
 
@@ -5,6 +8,7 @@
 
 
 # python packages
+import argparse
 from math import sqrt, log10
 from collections import OrderedDict, Counter
 
@@ -90,6 +94,7 @@ def load_results(input_file):
 
 
 ########################################################################################################################
+
 
 # dictionary to hold rq tf-idf memoize
 rq_tf_idf_memoize = {}
@@ -233,18 +238,13 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
 
 
 # main function
-def main():
+def main(lambda_weight):
 
     # load docs
     doc_vec, doc_term_ids = load_docs('input/document_term_vectors.dat')
 
     # load results
     qid_did_score, doc_ids, doc_score = load_results('output/final/question-1/BM25b0.75_0.res')
-
-    # variable to hold lambda weight set to 0.25
-    lambda_weight = 0.25
-    # variable to hold lambda weight set to 0.5
-    # lambda_weight = 0.5
 
     # assign length of document vector to document vector length
     doc_vec_len = len(doc_vec)
@@ -276,7 +276,15 @@ def main():
 
 # runs main function
 if __name__ == '__main__':
-    main()
+
+    # parse script argument
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--lambda', type=float, dest='lambda_', metavar='lambda weight value',
+                        help='lambda weight value', required=True)
+    args = parser.parse_args()
+
+    # call main function with the script argument as parameter
+    main(args.lambda_)
 
 
 ########################################################################################################################
