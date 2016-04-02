@@ -239,7 +239,7 @@ def main():
     doc_vec, doc_term_ids = load_docs('input/document_term_vectors.dat')
 
     # load results
-    qid_did_score, doc_ids, doc_score = load_results('output/question-1/BM25b0.75_0.res')
+    qid_did_score, doc_ids, doc_score = load_results('output/final/question-1/BM25b0.75_0.res')
 
     # variable to hold lambda weight set to 0.25
     lambda_weight = 0.25
