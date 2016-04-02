@@ -7,6 +7,7 @@
 # python packages
 from math import log2
 from operator import attrgetter
+from collections import OrderedDict, Counter
 
 
 ########################################################################################################################
@@ -70,7 +71,9 @@ class Result(object):
 def load_docs(input_file):
 
     # list to hold unique docs
-    unique_docs = []
+    unique_doc_ids = []
+    # list to hold document term ids
+    doc_term_ids = []
     # list to hold data
     data = []
     # variable to hold documents length
@@ -81,39 +84,43 @@ def load_docs(input_file):
         # for every line in input file
         for line in input_file:
             # if document id is not in unique docs
-            if line.split(' ')[0] not in unique_docs:
+            if line.split(' ')[0] not in unique_doc_ids:
                 # add document id to unique documents list
-                unique_docs += [line.split(' ')[0]]
+                unique_doc_ids += [line.split(' ')[0]]
                 # split line into tokens
                 tokens = line.strip(' \n').split(' ')
                 # assign first token to document id
                 doc_id = tokens[0]
-                # assign all tokens except the first one to document vector
-                doc_vec = tokens[1:]
                 # list to hold document term id
                 doc_term_id = []
                 # list to hold document term frequency
                 doc_term_freq = []
                 # variable to hold document length
                 doc_len = 0
+                # list to hold temporary document vector
+                doc_vec_temp = []
                 # for every token except the first one
                 for token in tokens[1:]:
                     # split token
                     token = token.split(':')
+                    # add first token to document term ids
+                    doc_term_ids += [int(token[0])]
                     # add first token to document term id
                     doc_term_id += [token[0]]
                     # add second token to document term frequency
                     doc_term_freq += [token[1]]
                     # add second token to document length
                     doc_len += int(token[1])
+                    # add first and second token to temporary document vector
+                    doc_vec_temp += [(token[0], int(token[1]))]
                 # add document length to documents length
                 docs_len += doc_len
                 """ add document id, document vector, document term id, document term
                     frequency and document length as attributes of the Doc object """
-                data += [Doc(doc_id, doc_vec, doc_term_id, doc_term_freq, doc_len)]
+                data += [Doc(doc_id, doc_vec_temp, doc_term_id, doc_term_freq, doc_len)]
 
-    # return data and documents length
-    return data, docs_len
+    # return data, document term ids and documents length
+    return data, doc_term_ids, docs_len
 
 
 ########################################################################################################################
@@ -183,7 +190,7 @@ def get_fqid(query_term_id, doc_vec):
 
 
 # calculates bm25 score
-def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
+def calc_bm25(docs, doc_freq, docs_len, N, query_id, query_term_ids, k1, b):
 
     # list to hold data
     data = []
@@ -198,7 +205,7 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
         # variable to hold document id
         doc_id = doc.doc_id
         # variable to hold document vector
-        doc_vec = doc.doc_vec
+        doc_vec = OrderedDict(doc.doc_vec)
         # variable to hold document length
         doc_len = doc.doc_len
 
@@ -216,9 +223,9 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
             # idfqi - inverse document frequency weight of the current query term qi
 
             # calculate nqi
-            nqi = doc_term_ids.count(query_term_id)
+            nqi = doc_freq.get(int(query_term_id))
             # get fqid
-            fqid = get_fqid(query_term_id, doc_vec)
+            fqid = doc_vec.get(query_term_id, 0)
 
             # calculate idfqi
             idfqi = log2((N - nqi + 0.5) / (nqi + 0.5))
@@ -253,7 +260,7 @@ def calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_ids, k1, b):
 def main():
 
     # load docs
-    docs, docs_len = load_docs('input/document_term_vectors.dat')
+    docs, doc_term_ids, docs_len = load_docs('input/document_term_vectors.dat')
     # load queries
     queries = load_queries('input/query_term_vectors.dat')
 
@@ -262,10 +269,13 @@ def main():
     # variable to hold free parameter k1
     k1 = 1.5
 
+    # create a counter of document term ids and assign it to document term ids counter
+    doc_term_ids_counter = Counter(doc_term_ids)
+    # get document frequency for every term, add it to an ordered dictionary and assign it to document frequency
+    doc_freq = OrderedDict([(x, doc_term_ids_counter[x]) for x in doc_term_ids])
+
     # variable to hold number of documents in the collection
     N = len(docs)
-    # for every document in collection, retrieve its term ids
-    doc_term_ids = [doc_term_id for doc in docs for doc_term_id in doc.doc_term_id]
 
     # for every query
     for query in queries:
@@ -274,7 +284,7 @@ def main():
         # variable to hold query term id
         query_term_id = query.query_term_id
         # calculate bm25 score and return output in results
-        results = calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_id, k1, b)
+        results = calc_bm25(docs, doc_freq, docs_len, N, query_id, query_term_id, k1, b)
         # open file
         with open('output/test/BM25b0.75_0.res', mode='a') as results_file:
             # variable to hold document rank

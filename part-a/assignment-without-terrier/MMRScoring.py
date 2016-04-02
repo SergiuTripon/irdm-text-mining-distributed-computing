@@ -41,7 +41,7 @@ def load_docs(input_file):
                     # split token
                     token = token.split(':')
                     # add first token to document term ids
-                    doc_term_ids += [int(token[0])]
+                    doc_term_ids += [token[0]]
                     # add first and second token to temporary document vector
                     doc_vec_temp += [(int(token[0]), int(token[1]))]
                 # add document id and temporary document vector to document vector list

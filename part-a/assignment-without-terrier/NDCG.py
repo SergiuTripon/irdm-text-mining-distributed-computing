@@ -4,26 +4,9 @@
 ########################################################################################################################
 
 
-# python package
+# python packages
 from math import log2
-
-
-########################################################################################################################
-
-
-# qrel object
-class Qrel(object):
-
-    def __init__(self, query_id, doc_id, qid_did, doc_rel):
-
-        # query id
-        self.query_id = query_id
-        # document id
-        self.doc_id = doc_id
-        # query id document id
-        self.qid_did = qid_did
-        # document relevance
-        self.doc_rel = doc_rel
+from collections import OrderedDict
 
 
 ########################################################################################################################
@@ -70,8 +53,8 @@ def load_results(input_file):
 # loads qrels
 def load_qrels(input_file):
 
-    # list to hold data
-    data = []
+    # list to hold document relevance
+    doc_qrel = OrderedDict({})
 
     # open file
     with open(input_file) as input_file:
@@ -84,37 +67,24 @@ def load_qrels(input_file):
             # assign third token to document id
             doc_id = tokens[2]
             # assign fourth token to document relevance
-            doc_rel = tokens[3]
+            doc_rel = int(tokens[3])
             # concatenate query id and document id and assign to query id document id
             qid_did = ' '.join([query_id, doc_id])
-            """ add query id, document id, query id document id and document relevance
-                as attributes of the Qrel object """
-            data += [Qrel(query_id, doc_id, [qid_did], doc_rel)]
+            # add document relevance to document relevance dictionary
+            doc_qrel[qid_did] = doc_rel
 
-    # return data
-    return data
+    # return doc relevance
+    return doc_qrel
 
 
 ########################################################################################################################
 
 
 # calculate ndcg
-def calc_ndcg(results, qrels, k, start, end):
+def calc_ndcg(results, doc_qrel, k, start, end):
 
-    # list to hold relevance scores
-    rels = []
-    # loop from start to end
-    for i in range(start, end):
-        # get document relevance score from qrels if query id document id is in qrels
-        doc_rel = [qrel.doc_rel for qrel in qrels for qid_did in qrel.qid_did if results[i] in qid_did]
-        # if query id document id is in qrels
-        if doc_rel:
-            # add document relevance to relevance scores list
-            rels += [int(doc_rel[0])]
-        # if query id document id is not in qrels
-        else:
-            # add 0 to relevance scores list
-            rels += [0]
+    # get document relevance scores for document ids between start and end
+    rels = [doc_qrel.get(results[i]) if doc_qrel.get(results[i]) is not None else 0 for i in range(start, end)]
 
     # if relevance score is greater than or equal to 1, rescale to 1, else 0 (binary)
     rels = [1 if x >= 1 else 0 for x in rels]
@@ -158,7 +128,7 @@ def main():
     # load results
     results, query_ids = load_results('input/BM25b0.75_0.res')
     # load qrels
-    qrels = load_qrels('input/qrels.adhoc.txt')
+    doc_qrel = load_qrels('input/qrels.adhoc.txt')
 
     # assign length of query ids to query ids length
     query_ids_len = len(query_ids)
@@ -274,7 +244,7 @@ def main():
             end = start + k
 
             # calculate ndcg and return output in ndcg
-            ndcg = calc_ndcg(results, qrels, k, start, end)
+            ndcg = calc_ndcg(results, doc_qrel, k, start, end)
             # add ndcg to average ndcg
             all_ndcg[i] += ndcg
 
@@ -304,6 +274,8 @@ def main():
         results_file.write('30\t|\t{0:.3f}\n'.format(avg_ndcg_k30))
         results_file.write('40\t|\t{0:.3f}\n'.format(avg_ndcg_k40))
         results_file.write('50\t|\t{0:.3f}'.format(avg_ndcg_k50))
+    # print progress
+    print('\nSaved results to file at path: \'{}\'\n'.format(results_file.name))
 
 
 ########################################################################################################################
