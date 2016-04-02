@@ -155,7 +155,7 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
     rq.remove(dq[0])
 
     # open file
-    with open('output/question-3/mmr_lambda_{:.2f}.txt'.format(lambda_weight), mode='a') as results_file:
+    with open('output/test/mmr_lambda_{:.2f}.txt'.format(lambda_weight), mode='a') as results_file:
         # write results in standard TREC format
         results_file.write('{} Q0 {} 0 {} BM25b0.75\n'.format(query_id, dq[0], max_score, lambda_weight))
 
@@ -179,7 +179,7 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
         # variable to hold highest mmr document
         high_mmr_doc_id = None
         # open file
-        with open('output/question-3/mmr_lambda_{:.2f}.txt'.format(lambda_weight), mode='a') as results_file:
+        with open('output/test/mmr_lambda_{:.2f}.txt'.format(lambda_weight), mode='a') as results_file:
             # for every rq document id
             for rq_doc_id in rq:
                 # for every dq document id

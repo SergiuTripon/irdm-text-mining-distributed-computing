@@ -276,7 +276,7 @@ def main():
         # calculate bm25 score and return output in results
         results = calc_bm25(docs, doc_term_ids, docs_len, N, query_id, query_term_id, k1, b)
         # open file
-        with open('output/question-1/BM25b0.75_0.res', mode='a') as results_file:
+        with open('output/test/BM25b0.75_0.res', mode='a') as results_file:
             # variable to hold document rank
             doc_rank = 0
             # for every result

@@ -116,8 +116,8 @@ def calc_ndcg(results, qrels, k, start, end):
             # add 0 to relevance scores list
             rels += [0]
 
-    # if relevance score is less than or equal to 0, rescale to 0
-    rels = [x if x >= 0 else 0 for x in rels]
+    # if relevance score is greater than or equal to 1, rescale to 1, else 0 (binary)
+    rels = [1 if x >= 1 else 0 for x in rels]
 
     # sort relevance scores in descending order and assign to sorted relevance scores
     sorted_rels = sorted(rels, reverse=True)
@@ -128,9 +128,9 @@ def calc_ndcg(results, qrels, k, start, end):
     sorted_rel1 = sorted_rels[0]
 
     # calculate dcg fraction
-    dcg_fraction = sum([(rels[i] / log2(i)) for i in range(2, k)])
+    dcg_fraction = sum([(rels[i] / log2(i + 1)) for i in range(1, k)])
     # calculate idcg fraction
-    idcg_fraction = sum([(sorted_rels[i] / log2(i)) for i in range(2, k)])
+    idcg_fraction = sum([(sorted_rels[i] / log2(i + 1)) for i in range(1, k)])
 
     # calculate dcg
     dcg = rel1 + dcg_fraction
@@ -294,7 +294,7 @@ def main():
     avg_ndcg_k50 = all_ndcg[6] / query_ids_len
 
     # write ndcg @ k in (1, 5, 10, 20, 30, 40, 50) to file
-    with open('output/question-2/bm25_ndcg.txt', mode='w') as results_file:
+    with open('output/test/bm25_ndcg.txt', mode='w') as results_file:
         results_file.write('bm25\n')
         results_file.write('K\t|\tNDCG@K\n')
         results_file.write('1\t|\t{0:.3f}\n'.format(avg_ndcg_k1))
