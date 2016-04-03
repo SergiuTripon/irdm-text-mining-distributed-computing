@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+########################################################################################################################
 
 # Ref: https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG
 
@@ -98,11 +101,15 @@ def calc_ndcg(results, doc_qrel, k, start, end):
     sorted_rel1 = sorted_rels[0]
 
     # calculate dcg fraction
-    # dcg_fraction = sum([(rels[i] / log2(i)) for i in range(2, k)])
-    dcg_fraction = sum([(rels[i] / log2(i + 1)) for i in range(1, k)])
+    # method 1 - wikipedia
+    dcg_fraction = sum([(rels[i] / log2(i)) for i in range(2, k)])
+    # method 2 - microsoft research paper
+    # dcg_fraction = sum([(rels[i] / log2(i + 1)) for i in range(1, k)])
     # calculate idcg fraction
-    # idcg_fraction = sum([(sorted_rels[i] / log2(i)) for i in range(2, k)])
-    idcg_fraction = sum([(sorted_rels[i] / log2(i + 1)) for i in range(1, k)])
+    # method 1 - wikipedia
+    idcg_fraction = sum([(sorted_rels[i] / log2(i)) for i in range(2, k)])
+    # method 2 - microsoft research paper
+    # idcg_fraction = sum([(sorted_rels[i] / log2(i + 1)) for i in range(1, k)])
 
     # calculate dcg
     dcg = rel1 + dcg_fraction

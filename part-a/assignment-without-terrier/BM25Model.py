@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+########################################################################################################################
 
 # Ref: https://en.wikipedia.org/wiki/Okapi_BM25
 
@@ -222,7 +225,7 @@ def calc_bm25(docs, doc_freq, docs_len, N, query_id, query_term_ids, k1, b):
             # fqid - current query term qi's term frequency in document D
             # idfqi - inverse document frequency weight of the current query term qi
 
-            # calculate nqi
+            # get nqi
             nqi = doc_freq.get(int(query_term_id))
             # get fqid
             fqid = doc_vec.get(query_term_id, 0)
