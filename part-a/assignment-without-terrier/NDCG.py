@@ -16,7 +16,7 @@ from collections import OrderedDict
 def load_results(input_file):
 
     # list to hold data
-    data = []
+    qid_did = []
     # list to hold query ids
     query_ids = []
 
@@ -39,12 +39,12 @@ def load_results(input_file):
                 # assign third token to document id
                 doc_id = tokens[2]
                 # concatenate query id and document id and assign to query id document id
-                qid_did = ' '.join([query_id, doc_id])
-                # add query id document id to data list
-                data += [qid_did]
+                qid_did_temp = ' '.join([query_id, doc_id])
+                # add temporary query id document id to query id document id list
+                qid_did += [qid_did_temp]
 
-    # return data and query ids lists
-    return data, query_ids
+    # return query id document id and query ids lists
+    return qid_did, query_ids
 
 
 ########################################################################################################################
