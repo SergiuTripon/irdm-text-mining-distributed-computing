@@ -273,7 +273,7 @@ def main():
     avg_ndcg_k50 = all_ndcg[6] / query_ids_len
 
     # write ndcg @ k in (1, 5, 10, 20, 30, 40, 50) to file
-    with open('output/test/bm25_ndcg.txt', mode='w') as results_file:
+    with open('output/temp/bm25_ndcg.txt', mode='w') as results_file:
         results_file.write('bm25\n')
         results_file.write('K\t|\tNDCG@K\n')
         results_file.write('1\t|\t{0:.3f}\n'.format(avg_ndcg_k1))
