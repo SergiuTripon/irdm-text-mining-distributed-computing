@@ -119,8 +119,8 @@ def calc_ndcg(results, doc_qrel, k, start, end):
     # set ndcg to 0.0
     ndcg = 0.0
 
-    # if dcg and idcg are not equal to 0.0
-    if dcg and idcg != 0.0:
+    # if dcg and idcg are not equal to 0 or 0.0
+    if dcg and idcg != 0 or 0.0:
         # calculate ndcg
         ndcg = dcg / idcg
 

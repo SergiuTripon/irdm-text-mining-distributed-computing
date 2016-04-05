@@ -179,9 +179,9 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
     print_progress = 1
     # loop from 0 to rq length
     for i in range(0, rq_len):
-        # variable to hold highest mmr set to 0.0
-        high_mmr = 0.0
-        # variable to hold highest mmr document
+        # variable to hold highest mmr set to null
+        high_mmr = None
+        # variable to hold highest mmr document set to null
         high_mmr_doc_id = None
         # open file
         with open('output/temp/mmr_lambda_{:.2f}.txt'.format(lambda_weight), mode='a') as results_file:
@@ -202,10 +202,13 @@ def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight
                     # calculate f2
                     f2 = calc_sim(rq_doc_id, dq_doc_id, OrderedDict(rq_doc_vec), OrderedDict(dq_doc_vec), idf)
                     # calculate mmr
-                    # assignment equation
-                    # mmr = (lambda_weight * f1) - (1 - lambda_weight) * f2
-                    # research paper equation
-                    mmr = lambda_weight * (f1 - (1 - lambda_weight) * f2)
+                    mmr = lambda_weight * f1 - (1 - lambda_weight) * f2
+                    # if high mmr is null:
+                    if high_mmr is None:
+                        # assign mmr to high mmr
+                        high_mmr = mmr
+                        # assign rq document id to high mmr document id
+                        high_mmr_doc_id = rq_doc_id
                     # if mmr is greater than high mmr:
                     if mmr > high_mmr:
                         # assign mmr to high mmr
