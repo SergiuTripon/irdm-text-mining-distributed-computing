@@ -189,7 +189,7 @@ def calc_mva(query_id, qid_did_score, rq, doc_score, doc_vec, b):
                     # calculate pearson's correlation coefficient
                     p_x_y = calc_pxy(rq_doc_id, dq_doc_id, OrderedDict(rq_doc_vec), OrderedDict(dq_doc_vec))
                     # calculate mva
-                    mva = norm_bm25_score - (b * i) - 2 * b * p_x_y
+                    mva = norm_bm25_score - b * i - 2 * b * p_x_y
                     # if high mva is null:
                     if high_mva is None:
                         # assign mva to high mva
