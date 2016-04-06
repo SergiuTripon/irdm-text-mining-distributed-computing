@@ -56,8 +56,8 @@ def load_results(input_file):
 # loads qrels
 def load_qrels(input_file):
 
-    # list to hold document relevance
-    doc_qrel = OrderedDict({})
+    # dictionary to hold document relevance
+    doc_rel = OrderedDict({})
 
     # open file
     with open(input_file) as input_file:
@@ -69,25 +69,25 @@ def load_qrels(input_file):
             query_id = tokens[0]
             # assign third token to document id
             doc_id = tokens[2]
-            # assign fourth token to document relevance
-            doc_rel = int(tokens[3])
+            # assign fourth token to temporary document relevance
+            doc_rel_temp = int(tokens[3])
             # concatenate query id and document id and assign to query id document id
             qid_did = ' '.join([query_id, doc_id])
-            # add document relevance to document relevance dictionary
-            doc_qrel[qid_did] = doc_rel
+            # add temporary document relevance to document relevance dictionary
+            doc_rel[qid_did] = doc_rel_temp
 
     # return doc relevance
-    return doc_qrel
+    return doc_rel
 
 
 ########################################################################################################################
 
 
 # calculate ndcg
-def calc_ndcg(results, doc_qrel, k, start, end):
+def calc_ndcg(results, doc_rel, k, start, end):
 
     # get document relevance scores for document ids between start and end
-    rels = [doc_qrel.get(results[i]) if doc_qrel.get(results[i]) is not None else 0 for i in range(start, end)]
+    rels = [doc_rel.get(results[i]) if doc_rel.get(results[i]) is not None else 0 for i in range(start, end)]
 
     # if relevance score is greater than or equal to 1, rescale to 1, else 0 (binary)
     rels = [1 if x >= 1 else 0 for x in rels]
@@ -137,7 +137,7 @@ def main():
     # load results
     results, query_ids = load_results('input/BM25b0.75_0.res')
     # load qrels
-    doc_qrel = load_qrels('input/qrels.adhoc.txt')
+    doc_rel = load_qrels('input/qrels.adhoc.txt')
 
     # assign length of query ids to query ids length
     query_ids_len = len(query_ids)
@@ -253,7 +253,7 @@ def main():
             end = start + k
 
             # calculate ndcg and return output in ndcg
-            ndcg = calc_ndcg(results, doc_qrel, k, start, end)
+            ndcg = calc_ndcg(results, doc_rel, k, start, end)
             # add ndcg to average ndcg
             all_ndcg[i] += ndcg
 

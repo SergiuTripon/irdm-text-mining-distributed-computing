@@ -90,8 +90,8 @@ def load_qrels(input_file):
 ########################################################################################################################
 
 
-# calculate ndcg
-def calc_ndcg(results, doc_int, doc_rel, k, alpha, start, end):
+# calculate alpha ndcg
+def calc_alpha_ndcg(results, doc_int, doc_rel, k, alpha, start, end):
 
     # get document relevance scores for document ids between start and end
     rels = [doc_int.get(results[i]) * ((1 - alpha) ** doc_rel.get(results[i]))
@@ -224,7 +224,7 @@ def main(model_value):
                 end = start + k
 
                 # calculate alpha-ndcg and return output in alpha ndcg
-                alpha_ndcg = calc_ndcg(results, doc_int, doc_rel, k, alpha, start, end)
+                alpha_ndcg = calc_alpha_ndcg(results, doc_int, doc_rel, k, alpha, start, end)
                 # add alpha ndcg to all alpha ndcg
                 all_alpha_ndcg[i] += alpha_ndcg
 
