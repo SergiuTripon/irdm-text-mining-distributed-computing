@@ -153,7 +153,7 @@ def calc_sim(rq_doc_id, dq_doc_id, rq_doc_vec, dq_doc_vec, idf):
 def calc_mmr(query_id, qid_did_score, rq, doc_score, doc_vec, idf, lambda_weight):
 
     # assign first token of document score to max score
-    max_score = doc_score[0]
+    max_score = max(doc_score)
     # assign first token of rq to dq
     dq = [rq[0]]
     # remove first token of dq from rq
