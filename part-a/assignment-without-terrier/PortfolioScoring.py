@@ -105,19 +105,14 @@ rq_dq_term_freq_memoize = {}
 # calculates pearson's correlation coefficient between two given documents
 def calc_pxy(rq_doc_id, dq_doc_id, rq_doc_vec, dq_doc_vec):
 
-    # assign union of rq document vector and dq document vector to union
-    union = rq_doc_vec.keys() | dq_doc_vec.keys()
-    # sort union in ascending order
-    union = sorted(union)
-
     # concatenate rq and dq document id and assign to rq dq document id
     rq_dq_doc_id = ' '.join([rq_doc_id, dq_doc_id])
 
     # if rq dq document id is not in rq dq term frequency memoize
     if rq_dq_doc_id not in rq_dq_term_freq_memoize:
         # assign rq and dq document vector values to rq and dq document term frequency
-        rq_doc_term_freq = [rq_doc_vec.get(x) if rq_doc_vec.get(x) is not None else 0 for x in union]
-        dq_doc_term_freq = [dq_doc_vec.get(x) if dq_doc_vec.get(x) is not None else 0 for x in union]
+        rq_doc_term_freq = [rq_doc_vec.get(x) for x in rq_doc_vec.keys() if x in dq_doc_vec.keys()]
+        dq_doc_term_freq = [dq_doc_vec.get(x) for x in dq_doc_vec.keys() if x in rq_doc_vec.keys()]
         # add rq and dq document term frequency to rq dq term frequency memoize
         rq_dq_term_freq_memoize[rq_dq_doc_id] = (rq_doc_term_freq, dq_doc_term_freq)
 
