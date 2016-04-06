@@ -110,7 +110,7 @@ def calc_pxy(rq_doc_id, dq_doc_id, rq_doc_vec, dq_doc_vec):
 
     # if rq dq document id is not in rq dq term frequency memoize
     if rq_dq_doc_id not in rq_dq_term_freq_memoize:
-        # assign rq and dq document vector values to rq and dq document term frequency
+        # assign rq and dq document vector values to rq and dq document term frequency if term ids appear in both
         rq_doc_term_freq = [rq_doc_vec.get(x) for x in rq_doc_vec.keys() if x in dq_doc_vec.keys()]
         dq_doc_term_freq = [dq_doc_vec.get(x) for x in dq_doc_vec.keys() if x in rq_doc_vec.keys()]
         # add rq and dq document term frequency to rq dq term frequency memoize
