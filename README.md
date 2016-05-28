@@ -29,6 +29,8 @@ The primary objective of this part of the assignment was to introduce Hadoop and
 
 ##### Instructions
 
+To run the source code, follow the steps below:
+
 ###### Part A: Text Mining
 
 ```bash
