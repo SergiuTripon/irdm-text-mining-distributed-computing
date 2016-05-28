@@ -6,7 +6,7 @@ Repository contents:
 
 * Part A source code in Python
 * Part B source code in Java
-* Report source code in LaTeX
+* Report source code in LaTeX, and report in PDF format
 
 ---
 
