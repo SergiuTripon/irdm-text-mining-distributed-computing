@@ -1,12 +1,14 @@
-#### IRDM - Assignment 1 - Part A & B
+### IRDM - Assignment 1 - Part A & B
 
-This is an assigment I completed as part of the [COMPGI15 - Information Retrieval & Data Mining](http://www.cs.ucl.ac.uk/teaching_learning/syllabus/mscml/gi15_information_retrieval_data_mining/) module (MSc Web Science and Big Data Analytics) which I undertook at UCL.
+This is the code of the first assigment I completed as part of the [COMPGI15 - Information Retrieval & Data Mining](http://www.cs.ucl.ac.uk/teaching_learning/syllabus/mscml/gi15_information_retrieval_data_mining/) module (MSc Web Science and Big Data Analytics) which I undertook at UCL.
 
-Repository contents:
+---
+
+#### Repository contents
 
 * Part A source code in Python
 * Part B source code in Java
-* Report source code in LaTeX, and report in PDF format
+* [Assignment report](https://github.com/SergiuTripon/irdm-text-mining-distributed-computing/blob/master/part-a-b-report/compgi15_assignment1_sergiu_tripon_report.pdf) in PDF format
 
 ---
 
