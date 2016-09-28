@@ -8,7 +8,7 @@ Source code of the first assigment completed as part of the [COMPGI15 - Informat
 
 * Part A source code in Python
 * Part B source code in Java
-* [Assignment report](https://github.com/SergiuTripon/irdm-text-mining-distributed-computing/blob/master/part-a-b-report/compgi15_assignment1_sergiu_tripon_report.pdf) in PDF format
+* [Report](https://github.com/SergiuTripon/irdm-text-mining-distributed-computing/blob/master/part-a-b-report/compgi15_assignment1_sergiu_tripon_report.pdf) in PDF format
 
 ---
 
