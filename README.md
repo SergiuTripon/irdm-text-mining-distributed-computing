@@ -1,6 +1,6 @@
-### IRDM - Assignment 1 - Part A & B
+### IRDM - Assignment 1 - Text Mining and Distributed Computing - Source Code
 
-This is the code of the first assigment I completed as part of the [COMPGI15 - Information Retrieval & Data Mining](http://www.cs.ucl.ac.uk/teaching_learning/syllabus/mscml/gi15_information_retrieval_data_mining/) module (MSc Web Science and Big Data Analytics) which I undertook at UCL.
+Source code of the first assigment completed as part of the [COMPGI15 - Information Retrieval & Data Mining](http://www.cs.ucl.ac.uk/teaching_learning/syllabus/mscml/gi15_information_retrieval_data_mining/) module (MSc Web Science and Big Data Analytics) at [University College London](http://www.ucl.ac.uk/).
 
 ---
 
@@ -12,7 +12,7 @@ This is the code of the first assigment I completed as part of the [COMPGI15 - I
 
 ---
 
-#### Assignment Brief
+#### Assignment brief
 
 The aim of this assignment was to experiment with:
 
